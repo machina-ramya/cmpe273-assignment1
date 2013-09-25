@@ -26,7 +26,7 @@ public class BookDto extends LinksDto {
 
         // Now create entries in the author table by 
         // reading author information from the book entry
-        ArrayList<Author> authors = aBook.getAuthors();
+        ArrayList<Author> authors = aBook.authorList();
         if( authors != null && authors.size() > 0 ) {
 
             // For each author, search the author table to see if there an entry already. 
@@ -37,7 +37,7 @@ public class BookDto extends LinksDto {
             int i = 0;
 
             while(iterator.hasNext()) {
-                Author author = iterator.next();
+                Author author = (Author) iterator.next();
                 long id = aAuthorDao.getAuthorId(author.getName());
                 if( id <= 0 ) {
                     // Author not found, create a new id and put it in the table

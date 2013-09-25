@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import edu.sjsu.cmpe.library.domain.Author;
 import edu.sjsu.cmpe.library.domain.Review;
+import edu.sjsu.cmpe.library.dto.LinkDto;
 
 public class Book {
 
@@ -34,8 +35,7 @@ public class Book {
 
     private String[] availableStatusValues;
 
-    @JsonProperty
-    private ArrayList<Author> authors;
+    private ArrayList<Author> iAuthorList;
 
     @JsonProperty
     private ArrayList<Review> reviews;
@@ -130,27 +130,54 @@ public class Book {
         return status;
     }
 
-    public ArrayList<Author> getAuthors() {
-        return authors;
+    public ArrayList<Author> authorList() {
+        return iAuthorList;
+    }
+
+    public ArrayList<LinkDto> getAuthors() {
+        // If there are authors, then return the links to REST apis for authors. 
+        if( iAuthorList == null || iAuthorList.size() <= 0 ) {
+            return new ArrayList<LinkDto>();
+        }
+
+        ArrayList<LinkDto> links = new ArrayList<LinkDto>();
+
+        for(int i = 0; i < iAuthorList.size(); i++) {
+
+            Author a = iAuthorList.get(i);
+            if( a != null ) {
+                long id = a.getAuthorId();
+                links.add(new LinkDto("view-author", 
+                                      "/books/" + getIsbn() +
+                                      "/authors/" + id, 
+                                      "GET"));
+            }
+        }
+
+        return links;
+    }
+
+    public void setAuthors(@JsonProperty("authors") ArrayList<Author> aAuthors) {
+        iAuthorList = aAuthors;
     }
 
     public void setAuthorId(int aPos, long aAuthorId) {
-        if( authors != null && authors.size() > 0 && 
-            aPos >= 0 && aPos < authors.size() ) {
-            authors.get(aPos).setAuthorId( aAuthorId );
+        if( iAuthorList != null && iAuthorList.size() > 0 && 
+            aPos >= 0 && aPos < iAuthorList.size() ) {
+            iAuthorList.get(aPos).setAuthorId( aAuthorId );
         }
     }
 
     public boolean containsAuthor(Author aAuthor) {
-        if( authors == null || authors.size() <= 0 || aAuthor == null) {
+        if( iAuthorList == null || iAuthorList.size() <= 0 || aAuthor == null) {
             return false;
         }
 
-        Iterator<Author> i = authors.iterator();
+        Iterator<Author> i = iAuthorList.iterator();
         long aId = aAuthor.getAuthorId();
 
         while( i.hasNext() ) {
-            Author a = i.next();
+            Author a = (Author) i.next();
             if( a != null && a.getAuthorId() == aId ) {
                 return true;
             }

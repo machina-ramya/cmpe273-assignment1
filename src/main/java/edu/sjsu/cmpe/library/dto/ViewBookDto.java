@@ -3,6 +3,7 @@ package edu.sjsu.cmpe.library.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import edu.sjsu.cmpe.library.domain.Book;
+import edu.sjsu.cmpe.library.domain.Review;
 import edu.sjsu.cmpe.library.domain.Author;
 import edu.sjsu.cmpe.library.dao.BookDao;
 import edu.sjsu.cmpe.library.dao.AuthorDao;

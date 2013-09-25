@@ -88,7 +88,7 @@ public class AuthorResource {
         }
 
         // Fetch all the authors
-        ArrayList<Author> authors = b.getAuthors();
+        ArrayList<Author> authors = b.authorList();
 
         if( authors == null || authors.size() <= 0 ) {
             return Response.status(404).build();
